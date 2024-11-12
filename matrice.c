@@ -1,7 +1,7 @@
 /**
  * @file matrice.c
  * @brief Fichier source du module matrice
- * @date 9 novembre 2024
+ * @date 12 novembre 2024
  * @author KATOUZIAN Pouria
  * @author SIERRA MARIB Mateo
  */
@@ -10,9 +10,26 @@
 #ifndef _MATRICE_H_
 #define _MATRICE_H_
 
-#include <matrice.h>
+#include "matrice.h"
 
-matrice *lire_matrice(char *filename)
+
+/**
+ * @brief Fonction de création de la matrice creuse
+ * 
+ * @param file : nom du fichier contenant la matrice
+ * @return CSC* : pointeur sur la matrice creuse
+ */
+static matrice *lire_matrice(char *filename);
+
+/**
+ * @brief Fonction de destruction de la matrice
+ * 
+ * @param ptrM : pointeur sur la matrice
+ */
+static void detruire_matrice(matrice *ptrM);
+
+
+static matrice *lire_matrice(char *filename)
 {
     assert(filename);
 
@@ -188,13 +205,12 @@ CSC *cree_matrice_creuse(char *file)
     return ptrCSC;
 }
 
-void detruire_matrice(matrice *ptrM)
+static void detruire_matrice(matrice *ptrM)
 {
     free(ptrM->ligne);
     free(ptrM->colonne);
     free(ptrM->val);
     free(ptrM);
-    return NULL;
 }
 
 void detruire_CSC(CSC *ptrCSC)
@@ -203,7 +219,6 @@ void detruire_CSC(CSC *ptrCSC)
     free(ptrCSC->colonne);
     free(ptrCSC->val);
     free(ptrCSC);
-    return NULL;
 }
 
 #endif

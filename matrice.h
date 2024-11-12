@@ -43,14 +43,6 @@ typedef struct CSC_t
 
 
 
-/**
- * @brief Fonction de création de la matrice creuse
- * 
- * @param file : nom du fichier contenant la matrice
- * @return CSC* : pointeur sur la matrice creuse
- */
-matrice *lire_matrice(char *filename);
-
 
 /**
  * @brief Fonction de création de la matrice creuse
@@ -59,13 +51,6 @@ matrice *lire_matrice(char *filename);
  * @return CSC* : pointeur sur la matrice creuse
  */
 CSC *cree_matrice_creuse(char *file);
-
-/**
- * @brief Fonction de destruction de la matrice
- * 
- * @param ptrM : pointeur sur la matrice
- */
-void detruire_matrice(matrice *ptrM);
 
 
 /**
