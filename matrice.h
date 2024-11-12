@@ -7,11 +7,6 @@
  * 
  */
 
-
-/**
- * @brief Structure de la matrice creuse
- */
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
@@ -41,8 +36,12 @@ typedef struct CSC_t
     double *val;        // Tableau des valeurs
 }CSC;  // Compressed Sparse Column
 
-
-
+/**
+ * @brief Fonction d'affichage de la matrice creuse
+ * 
+ * @param ptrCSC : pointeur sur la matrice creuse
+ */
+void print_CSC(CSC *ptrCSC);
 
 /**
  * @brief Fonction de création de la matrice creuse
