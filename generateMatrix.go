@@ -59,7 +59,7 @@ func main() {
 	})
 
 	// Write the matrix to a file
-	file, err := os.Create(filename + ".mtx")
+	file, err := os.Create(filename + ".txt")
 	if err != nil {
 		fmt.Println("Error creating file:", err)
 		return
@@ -77,5 +77,5 @@ func main() {
 	}
 
 	writer.Flush()
-	fmt.Println("Sparse matrix saved to " + filename + ".mtx")
+	fmt.Println("Sparse matrix saved to sparse_matrix.txt")
 }
