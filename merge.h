@@ -26,12 +26,12 @@ void mergeSort(int lignes[], int cols[], double elemnonzero[], int n);
  * @param colsTmp Tableau temporaire des colonnes.
  * @param lignesTmp Tableau temporaire des lignes.
  * @param elemnonzeroTmp Tableau temporaire des éléments non nuls.
- * @param l Indice de début.
- * @param m Indice du milieu.
- * @param r Indice de fin.
+ * @param leftStart Indice de début.
+ * @param midPoint Indice du milieu.
+ * @param rightEnd Indice de fin.
  * @return void
  */
-void merge(int lignes[], int cols[], double elemnonzero[], int *colsTmp,
-           int *lignesTmp, double *elemnonzeroTmp, int l, int m, int r);
+void merge(int lignes[], int cols[], double nnz[], int *colsTemp,
+           int *lignesTemp, double *elemnonzeroTmp, int leftStart, int midPoint, int rightEnd)
 
 #endif
