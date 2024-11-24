@@ -55,6 +55,7 @@ CSC *cree_matrice_creuse(char *file)
     }
 
     // TODO : fonction de Triage
+    //mergeSort(matrice->rows, matrice->cols, matrice->values, CSC->nnz);
 
     int colCurrent = 0;
     int indiceColonne = 0;
