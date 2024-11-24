@@ -24,7 +24,7 @@ CSC *cree_matrice_creuse(char *file)
     ptrCSC->nbColonnes = ptrM->colonnes;
     ptrCSC->nbElement = ptrM->elements;
 
-    ptrCSC->ligne = (int *)malloc((ptrCSC->nbColonnes + 1) * sizeof(int));
+    ptrCSC->ligne = (int *)malloc((ptrCSC->nbElement) * sizeof(int));
     if (ptrCSC->ligne == NULL)
     {
         fprintf(stderr, "Erreur d'allocation du tableau des lignes\n");
@@ -33,7 +33,7 @@ CSC *cree_matrice_creuse(char *file)
         return NULL;
     }
 
-    ptrCSC->colonne = (int *)malloc(ptrCSC->nbElement * sizeof(int));
+    ptrCSC->colonne = (int *)malloc((ptrCSC->nbColonnes + 1) * sizeof(int));
     if (ptrCSC->colonne == NULL)
     {
         fprintf(stderr, "Erreur d'allocation du tableau des colonnes\n");
