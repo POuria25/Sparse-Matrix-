@@ -10,7 +10,7 @@
 #ifndef _MATRICE_H_
 #define _MATRICE_H_
 
-#include <matrice.h>
+#include "matrice.h"
 
 matrice *lire_matrice(char *filename)
 {
@@ -31,7 +31,7 @@ matrice *lire_matrice(char *filename)
         return NULL;
     }
 
-    if (fscanf(opf, "%d %d %d", &ptrM->lignes, &ptrM->colonnes, &ptrM->elements) != 3)
+    if (fscanf(opf, "%u %u %u", &ptrM->lignes, &ptrM->colonnes, &ptrM->elements) != 3)
     {
         fprintf(stderr, "Erreur de lecture de la matrice\n");
         fclose(opf);
@@ -111,7 +111,6 @@ void detruire_matrice(matrice *ptrM)
     free(ptrM->colonne);
     free(ptrM->val);
     free(ptrM);
-    return NULL;
 }
 
 

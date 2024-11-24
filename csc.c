@@ -55,7 +55,7 @@ CSC *cree_matrice_creuse(char *file)
     }
 
     // TODO : fonction de Triage
-    //mergeSort(matrice->rows, matrice->cols, matrice->values, CSC->nnz);
+    mergeSort(ptrM->ligne, ptrM->colonne, ptrM->val, ptrCSC->nbElement);
 
     int colCurrent = 0;
     int indiceColonne = 0;
@@ -86,11 +86,21 @@ CSC *cree_matrice_creuse(char *file)
     return ptrCSC;
 }
 
+void print_CSC(CSC *ptrCSC)
+{
+    for (int colptr = 0; colptr < ptrCSC->nbColonnes; colptr++)
+    {
+        for (int eleIndex = ptrCSC->colonne[colptr]; eleIndex < ptrCSC->colonne[colptr + 1]; eleIndex++)
+        {
+            printf("%d %d -> %lf\n", colptr, ptrCSC->ligne[eleIndex], ptrCSC->val[eleIndex]);
+        }
+    }
+}
+
 void detruire_CSC(CSC *ptrCSC)
 {
     free(ptrCSC->ligne);
     free(ptrCSC->colonne);
     free(ptrCSC->val);
     free(ptrCSC);
-    return NULL;
 }

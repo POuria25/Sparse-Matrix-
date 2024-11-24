@@ -32,6 +32,6 @@ void mergeSort(int lignes[], int cols[], double elemnonzero[], int n);
  * @return void
  */
 void merge(int lignes[], int cols[], double nnz[], int *colsTemp,
-           int *lignesTemp, double *elemnonzeroTmp, int leftStart, int midPoint, int rightEnd)
+           int *lignesTemp, double *nnzTemp, int leftStart, int midPoint, int rightEnd);
 
 #endif

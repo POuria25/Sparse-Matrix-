@@ -35,11 +35,10 @@ void mergeSort(int lignes[], int cols[], double elemnonzero[], int n)
   }
 
   int currentSize = 1;
-  int leftStart;
 
   while (currentSize <= n - 1)
   {
-    leftStart = 0;
+    int leftStart = 0;
     while (leftStart < n - 1)
     {
       int mid = fmin(leftStart + currentSize - 1, n - 1);
@@ -72,7 +71,7 @@ void merge(int lignes[], int cols[], double nnz[], int *colsTemp,
   assert(colsTemp != NULL && lignesTemp != NULL && nnzTemp != NULL);
 
   // Copier les donnés aux tableaux temp tq colsTemp[] et lignesTemp[]
-  int currentIndex = 1;
+  int currentIndex = leftStart;
   while (currentIndex <= rightEnd)
   {
     colsTemp[currentIndex] = cols[currentIndex];
@@ -83,7 +82,7 @@ void merge(int lignes[], int cols[], double nnz[], int *colsTemp,
 
   // Merge temp arrays back into the original arrays
   for (int leftIndex = leftStart, rightIndex = midPoint + 1, mergedIndex = leftStart;
-       leftIndex <= midPoint || rightIndex <= rightEnd;
+       leftIndex <= midPoint && rightIndex <= rightEnd;
        mergedIndex++)
   {
     /*
@@ -93,11 +92,9 @@ void merge(int lignes[], int cols[], double nnz[], int *colsTemp,
       sont égales et la valeur de lignesTemp à l'index de gauche est inférieure ou égale à 
       celle à l'index de droite)
     */
-    if (leftIndex <= midPoint &&
-        (rightIndex > rightEnd ||
-         colsTemp[leftIndex] < colsTemp[rightIndex] ||
+    if (colsTemp[leftIndex] < colsTemp[rightIndex] ||
          (colsTemp[leftIndex] == colsTemp[rightIndex] &&
-          lignesTemp[leftIndex] <= lignesTemp[rightIndex])))
+          lignesTemp[leftIndex] <= lignesTemp[rightIndex]))
     {
       // Copie l'élément du sous-tableau gauche dans le tableau original
       cols[mergedIndex] = colsTemp[leftIndex];

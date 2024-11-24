@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <assert.h>
 #include "matrice.h"
+#include "merge.h"
 
 /**
  * @brief Structure de la matrice creuse au format CSR
@@ -26,6 +27,13 @@ typedef struct CSC_t
  * @return CSC* : pointeur sur la matrice creuse
  */
 CSC *cree_matrice_creuse(char *file);
+
+/**
+ * @brief Fonction d'affichage de la matrice creuse
+ * 
+ * @param ptrCSC : pointeur sur la matrice creuse
+ */
+void print_CSC(CSC *ptrCSC);
 
 /**
  * @brief Fonction de destruction de la matrice creuse
