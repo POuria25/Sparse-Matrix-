@@ -88,6 +88,7 @@ CSC *cree_matrice_creuse(char *file)
 
 void print_CSC(CSC *ptrCSC)
 {
+    printf("Print matrice %d x %d: %d elements\n", ptrCSC->nbLignes, ptrCSC->nbColonnes, ptrCSC->nbElement);
     for (int colptr = 0; colptr < ptrCSC->nbColonnes; colptr++)
     {
         for (int eleIndex = ptrCSC->colonne[colptr]; eleIndex < ptrCSC->colonne[colptr + 1]; eleIndex++)

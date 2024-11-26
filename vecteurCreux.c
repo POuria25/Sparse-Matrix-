@@ -20,7 +20,7 @@ vecCreux *cree_vecteur_creux(int taille, int nbNN)
         return NULL;
     }
 
-    if (taille > 0 && nbNN > 0) {
+    if (taille > 0 && nbNN >= 0) {
         vc->taille = taille;
         vc->nbEleNN = nbNN;
     } else {
@@ -98,7 +98,7 @@ vecCreux *lire_vecteur(char *filename) {
         }
 
         if (val != 0) {
-            vc->index[countNonNuls] = index;
+            vc->index[countNonNuls] = index - 1;
             vc->val[countNonNuls] = val;
             countNonNuls++;
         }
@@ -157,6 +157,7 @@ vecCreux *lire_vecteur(char *filename) {
 
 void print_vecteur(vecCreux *vc)
 {
+    printf("Print vecteur de taille %d avec %d elements\n", vc->taille, vc->nbEleNN);
     for (int i = 0; i < vc->nbEleNN; i++) {
         printf("%d %lf\n", vc->index[i], vc->val[i]);
     }
