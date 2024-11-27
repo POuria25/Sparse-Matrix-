@@ -54,15 +54,16 @@ CSC *cree_matrice_creuse(char *file)
         return NULL;
     }
 
-    // TODO : fonction de Triage
+    // Fonction de Triage
     mergeSort(ptrM->ligne, ptrM->colonne, ptrM->val, ptrCSC->nbElement);
 
+    // Transisition en CSC matrix
     int colCurrent = 0;
     int indiceColonne = 0;
     for (int i = 0; i < ptrCSC->nbElement; i++)
     {
         ptrCSC->val[i] = ptrM->val[i];
-        ptrCSC->ligne[i] = ptrM->ligne[i];
+        ptrCSC->ligne[i] = ptrM->ligne[i] - 1;
 
         while (ptrM->colonne[i] > colCurrent)
         {
@@ -71,15 +72,12 @@ CSC *cree_matrice_creuse(char *file)
         }
     }
 
-    // Completer la derniere colonne
-    ptrCSC->colonne[indiceColonne] = ptrCSC->nbElement;
-
     // Completer les colonnes restantes
-    while (indiceColonne <= ptrCSC->nbElement)
+    while (indiceColonne <= ptrCSC->nbColonnes)
     {
         ptrCSC->colonne[indiceColonne++] = ptrCSC->nbElement;
     }
-
+    
     // Liberer la matrice Tmporale
     detruire_matrice(ptrM);
 
@@ -93,7 +91,7 @@ void print_CSC(CSC *ptrCSC)
     {
         for (int eleIndex = ptrCSC->colonne[colptr]; eleIndex < ptrCSC->colonne[colptr + 1]; eleIndex++)
         {
-            printf("%d %d -> %lf\n", colptr, ptrCSC->ligne[eleIndex], ptrCSC->val[eleIndex]);
+            printf("%d %d -> %lf\n", ptrCSC->ligne[eleIndex], colptr, ptrCSC->val[eleIndex]);
         }
     }
 }
