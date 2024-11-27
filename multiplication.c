@@ -48,24 +48,25 @@ vecCreux *multiplication_CSCtrgl_vec_creux(CSC *L, vecCreux *b, int *estNNVecteu
     
     printf("A1\n");
 
-    /*
+    
     //remplir le vecteur x
     for (int i = 0; i < b->nbEleNN; i++) {
         int index = b->index[i];
 
-    printf("A2\n");
+        printf("A2\n");
 
         double diag = 0;
         for (int indexElem = L->colonne[index]; indexElem < L->colonne[index + 1]; indexElem++) {
             // Si Lii est non nuls
-            printf("%d * %d: %f / %f\n", L->ligne[indexElem] - 1, index, b->val[i], L->val[indexElem]);
-            if (L->ligne[indexElem] - 1 == index) {
+            if (L->ligne[indexElem] == index) {
                 diag = b->val[i] / L->val[indexElem];
                 x->index[estNNVecteur[index]] = diag;
+                printf("%d * %d: %f / %f = %lf\n", L->ligne[indexElem] + 1, index + 1, b->val[i], L->val[indexElem], diag);
+                break;
             }
         }
 
-    printf("A3 %f\n",diag);
+        printf("A3 %f\n",diag);
 
         // Si bi est non nuls mais Lii l'est
         if (diag == 0) {
@@ -76,16 +77,16 @@ vecCreux *multiplication_CSCtrgl_vec_creux(CSC *L, vecCreux *b, int *estNNVecteu
             return NULL;
         }
 
-    printf("A4\n");
+        printf("A4\n");
 
         for (int indexElem = L->colonne[index]; indexElem < L->colonne[index + 1]; indexElem++) {
             if (L->ligne[indexElem] <= index) continue;
 
 
         }
-    printf("A5\n");
+        printf("A5\n");
 
-    }*/
+    }
 
     printf("A6\n");
 

@@ -16,12 +16,39 @@ typedef struct vec_creux_t
     double *val;
 } vecCreux;
 
+/**
+ * @brief Fonction de creation d'un vecteur creux
+ * 
+ * @param taille : taille du vecteur creux
+ * @param nbNN : nombre d'elements non nuls dans le vecteur
+ * 
+ * @return Pointeur vers un vecteur creux alloué en mémoire
+ *  NULL en cas d'échec
+ */
 vecCreux *cree_vecteur_creux(int taille, int nbNN);
 
+/**
+ * @brief Lit un vecteur creux dans un fichier
+ * 
+ * @param filename : nom du fichier
+ * 
+ * @return Pointeur vers le vecteur creux contenu dans filename
+ *  NULL en cas d'échec
+ */
 vecCreux *lire_vecteur(char *filename);
 
+/**
+ * @brief Affiche un vecteur creux sur le standard output
+ * 
+ * @param vc : pointeur vers le vecteur à afficher
+ */
 void print_vecteur(vecCreux *vc);
 
+/**
+ * @brief Détruit un vecteur creux
+ * 
+ * @param vc : Pointeur vers le vecteur creux à detruire
+ */
 void detruire_vecteur(vecCreux *vc);
 
 #endif

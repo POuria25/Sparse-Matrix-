@@ -1,15 +1,22 @@
 #include "csc.h"
 #include "vecteurCreux.h"
 #include "multiplication.h"
+#include <stdio.h>
 
-int main() {
-    CSC *mtx = cree_matrice_creuse("tiny.txt");
+int main(int argv, char **args) {
+    char *filename = "tiny.txt";
+    if (argv > 1) filename = args[1];
+
+    CSC *mtx = cree_matrice_creuse(filename);
     if (mtx == NULL) {
         printf("ERROR 1\n");
         return 0;
     }
 
-    vecCreux *vc = lire_vecteur("tiny.b.txt");
+    filename = "tiny.b.txt";
+    if (argv > 2) filename = args[2];
+
+    vecCreux *vc = lire_vecteur(filename);
     if (vc == NULL) {
         detruire_CSC(mtx);
         printf("ERROR 2\n");
@@ -35,8 +42,6 @@ int main() {
         return 0;
     }
 
-    print_CSC(mtx);
-    print_vecteur(vc);
     print_vecteur(produit);
 
     detruire_CSC(mtx);
