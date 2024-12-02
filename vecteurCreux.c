@@ -57,6 +57,7 @@ vecCreux *lire_vecteur(char *filename) {
         return NULL;
     }
 
+    // Récupération des détails du vecteurs
     int taille,colonnes,nbNN;
     if (fscanf(opf, "%d %d %d", &taille, &colonnes, &nbNN) != 3)
     {
@@ -71,6 +72,7 @@ vecCreux *lire_vecteur(char *filename) {
         return NULL;
     }
     
+    // Creation du vecteur vide
     vecCreux *vc = cree_vecteur_creux(taille, nbNN);
     if (vc == NULL) {
         fprintf(stderr, "Erreur d'allocation du vecteur\n");
@@ -81,6 +83,7 @@ vecCreux *lire_vecteur(char *filename) {
     int index, colonne;
     double val;
 
+    // Ajout des éléments
     int countNonNuls = 0;
     for (int i = 0; i < nbNN; i++) {
         if (fscanf(opf, "%d %d %lf", &index, &colonne, &val) != 3) {
@@ -90,6 +93,7 @@ vecCreux *lire_vecteur(char *filename) {
             return NULL;
         }
 
+        // On arrete si l'éléments est hors du vecteur
         if (index > vc->taille || colonne != 1) {
             fprintf(stderr, "Erreur, lecture d'un index hors du vecteur\n");
             fclose(opf);
@@ -97,6 +101,7 @@ vecCreux *lire_vecteur(char *filename) {
             return NULL;
         }
 
+        // On ajoute pas les valeurs nulles
         if (val != 0) {
             vc->index[countNonNuls] = index - 1;
             vc->val[countNonNuls] = val;
@@ -104,6 +109,7 @@ vecCreux *lire_vecteur(char *filename) {
         }
     }
 
+    // On change la taille si le document contenait des valeurs nulles
     if (countNonNuls != vc->nbEleNN) {
         vc->index = (int *)realloc(vc->index, countNonNuls * sizeof(int));
         vc->val = (double *)realloc(vc->val, countNonNuls * sizeof(double));
@@ -126,6 +132,7 @@ vecCreux *lire_vecteur(char *filename) {
         return NULL;
     }
 
+    // memIndexs contient des couple (ancien ordre des indexs, indexs du vecteur)
     for (int i = 0; i < countNonNuls; i++) {
         memIndexs[i] = (int *)malloc(2 * sizeof(int));
         if (memIndexs[i] == NULL) {
@@ -141,12 +148,14 @@ vecCreux *lire_vecteur(char *filename) {
 
     qsort(memIndexs, countNonNuls, sizeof(int *), compare);
 
+    // Réarangements des indexs et valeurs dans l'ordre croissant des indexs
     for (int i = 0; i < countNonNuls; i++) {
         vc->index[i] = memIndexs[i][1];
         trueVals[i] = vc->val[memIndexs[i][0]];
         free(memIndexs[i]);
     }
 
+    // On écrase l'ancien ordre des valeurs
     free(vc->val);
     vc->val = trueVals;
 
@@ -157,9 +166,9 @@ vecCreux *lire_vecteur(char *filename) {
 
 void print_vecteur(vecCreux *vc)
 {
-    printf("Print vecteur de taille %d avec %d elements\n", vc->taille, vc->nbEleNN);
+    printf("Print vecteur de taille %d avec %d elements non nuls\n", vc->taille, vc->nbEleNN);
     for (int i = 0; i < vc->nbEleNN; i++) {
-        printf("%d %lf\n", vc->index[i], vc->val[i]);
+        printf("%d -> %lf\n", vc->index[i], vc->val[i]);
     }
 }
 

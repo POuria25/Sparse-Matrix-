@@ -6,14 +6,14 @@
 #include <assert.h>
 
 /**
- * @brief Struvture d'un vecteur creux
+ * @brief Vecteur creux
  */
 typedef struct vec_creux_t
 {
-    int taille;
-    int nbEleNN;
-    int *index;
-    double *val;
+    int taille; /**< Taille du vecteur */
+    int nbEleNN; /**< Nombre d'éléments non nuls dans le vecteur */
+    int *index; /**< Indexs des valeurs non nulles du vecteur */
+    double *val; /**< Valeurs non nulles du vecteur */
 } vecCreux;
 
 /**
