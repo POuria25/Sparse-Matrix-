@@ -15,6 +15,8 @@
  * 
  * @return pointeur sur le vecteur produit x
  */
-vecCreux *multiplication_CSCtrgl_vec_creux(CSC *L, vecCreux *b, int *estNNVecteur);
+vecCreux *linSysLxEqualb(CSC *L, vecCreux *b, int *estNNVecteur);
+
+vecCreux *calcUx(CSC *U, vecCreux *x, int *NNindexs);
 
 #endif

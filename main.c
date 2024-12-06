@@ -1,6 +1,7 @@
 #include "csc.h"
 #include "vecteurCreux.h"
 #include "multiplication.h"
+#include "GaussSeidel.h"
 #include <stdio.h>
 
 int main(int argv, char **args) {
@@ -33,7 +34,11 @@ int main(int argv, char **args) {
 
     for (int i = 0; i < vc->taille; i++) { arrNN[i] = -1; }
 
-    vecCreux *produit = multiplication_CSCtrgl_vec_creux(mtx, vc, arrNN);
+    double conv = 0.000001;
+    if (argv > 3) conv = strtod(args[3], &filename);
+    if (*filename != '\0') conv = 0.01;
+
+    vecCreux *produit = Gauss_Seidel(mtx, vc, conv, 100);
     if (produit == NULL) {
         detruire_CSC(mtx);
         detruire_vecteur(vc);

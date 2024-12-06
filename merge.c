@@ -81,7 +81,10 @@ void merge(int lignes[], int cols[], double nnz[], int *colsTemp,
   }
 
   // Merge temp arrays back into the original arrays
-  for (int leftIndex = leftStart, rightIndex = midPoint + 1, mergedIndex = leftStart;
+  int leftIndex = leftStart;
+  int rightIndex = midPoint + 1;
+  int mergedIndex = leftStart; 
+  for (;
        leftIndex <= midPoint && rightIndex <= rightEnd;
        mergedIndex++)
   {
@@ -110,5 +113,20 @@ void merge(int lignes[], int cols[], double nnz[], int *colsTemp,
       nnz[mergedIndex] = nnzTemp[rightIndex];
       rightIndex++;
     }
+    
+  }
+
+  for (;leftIndex <= midPoint;leftIndex++, mergedIndex++)
+  {
+    cols[mergedIndex] = colsTemp[leftIndex];
+    lignes[mergedIndex] = lignesTemp[leftIndex];
+    nnz[mergedIndex] = nnzTemp[leftIndex];
+  }
+
+  for (;rightIndex <= rightEnd;rightIndex++, mergedIndex++)
+  {
+    cols[mergedIndex] = colsTemp[rightIndex];
+    lignes[mergedIndex] = lignesTemp[rightIndex];
+    nnz[mergedIndex] = nnzTemp[rightIndex];
   }
 }

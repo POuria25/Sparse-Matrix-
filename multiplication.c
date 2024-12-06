@@ -43,7 +43,7 @@ void calcNonNulsX(CSC *L, int ind, int *compte, int *actifs, int *indexs)
     }
 }
 
-vecCreux *multiplication_CSCtrgl_vec_creux(CSC *L, vecCreux *b, int *estNNVecteur) 
+vecCreux *linSysLxEqualb(CSC *L, vecCreux *b, int *NNindexs) 
 {
     int nonNulsX = 0;
     int *nonNulsTab = (int *)malloc(b->taille * sizeof(int));
@@ -53,7 +53,7 @@ vecCreux *multiplication_CSCtrgl_vec_creux(CSC *L, vecCreux *b, int *estNNVecteu
     }
     //compter les non zero du nouveau vecteur
     for (int i = 0; i < b->nbEleNN; i++) {
-        calcNonNulsX(L, b->index[i], &nonNulsX, estNNVecteur, nonNulsTab);
+        calcNonNulsX(L, b->index[i], &nonNulsX, NNindexs, nonNulsTab);
     }
     int *temp = (int *)realloc(nonNulsTab, nonNulsX * sizeof(int));
     if (temp == NULL) {
@@ -68,7 +68,7 @@ vecCreux *multiplication_CSCtrgl_vec_creux(CSC *L, vecCreux *b, int *estNNVecteu
     if (x == NULL) {
         fprintf(stderr, "Erreur d'allocation du vecteur solution\n");
         for (int i = 0; i < nonNulsX; i++) {
-            estNNVecteur[nonNulsTab[i]] = -1;
+            NNindexs[nonNulsTab[i]] = -1;
         }
         free(nonNulsTab);
         return NULL;
@@ -79,12 +79,12 @@ vecCreux *multiplication_CSCtrgl_vec_creux(CSC *L, vecCreux *b, int *estNNVecteu
 
     // Initialisation des valeurs et indexs de x
     for (int i = 0; i < nonNulsX; i++) {
-        estNNVecteur[nonNulsTab[i]] = i;
+        NNindexs[nonNulsTab[i]] = i;
         x->index[i] = nonNulsTab[i];
         x->val[i] = 0;
     }
     for (int i = 0; i < b->nbEleNN; i++) {
-        x->val[estNNVecteur[b->index[i]]] = b->val[i];
+        x->val[NNindexs[b->index[i]]] = b->val[i];
     }
     
     // Remplissage du vecteur x
@@ -97,17 +97,17 @@ vecCreux *multiplication_CSCtrgl_vec_creux(CSC *L, vecCreux *b, int *estNNVecteu
             // Si on est sur la diagonale
             if (L->ligne[indexElem] == index) {
                 // Calcul xi
-                diag = x->val[estNNVecteur[index]] / L->val[indexElem];
-                x->val[estNNVecteur[index]] = diag;
+                diag = x->val[NNindexs[index]] / L->val[indexElem];
+                x->val[NNindexs[index]] = diag;
                 break;
             }
         }
 
         // Si bi est non nuls mais Lii l'est
         if (diag == 0) {
-            fprintf(stderr, "La contient une valeure nulle où elle ne devrait pas\n");
+            fprintf(stderr, "La matrice contient une valeure nulle où elle ne devrait pas en %d\n", index);
             for (int j = 0; j < x->nbEleNN; j++) {
-                estNNVecteur[nonNulsTab[j]] = -1;
+                NNindexs[nonNulsTab[j]] = -1;
             }
             free(nonNulsTab);
             return NULL;
@@ -118,14 +118,78 @@ vecCreux *multiplication_CSCtrgl_vec_creux(CSC *L, vecCreux *b, int *estNNVecteu
             // si j < i
             if (L->ligne[indexElem] <= index) continue;
             // xj = xj - Lji * xi
-            x->val[estNNVecteur[L->ligne[indexElem]]] = x->val[estNNVecteur[L->ligne[indexElem]]] - L->val[indexElem] * diag;
+            x->val[NNindexs[L->ligne[indexElem]]] = x->val[NNindexs[L->ligne[indexElem]]] - L->val[indexElem] * diag;
         }
     }
 
     // Reinitialisation du tableau des indexs non nuls
     for (int i = 0; i < x->nbEleNN; i++) {
-        estNNVecteur[x->index[i]] = -1;
+        NNindexs[x->index[i]] = -1;
     }
 
     return x;
+}
+
+vecCreux *calcUx(CSC *U, vecCreux *x, int *NNindexs)
+{
+    int countNN = 0;
+    int *NNTab = (int *)malloc(x->taille * sizeof(int));
+    // Compte non nuls
+    for (int i = 0; i < x->nbEleNN; i++) {
+        int col = x->index[i];
+
+        for (int idx = U->colonne[col]; idx < U->colonne[col + 1]; idx++) {
+            int lgn = U->ligne[idx];
+
+            if (lgn < col && NNindexs[lgn] == -1) {
+                NNTab[countNN] = lgn;
+                NNindexs[lgn] = 0;
+                countNN++;
+            }
+        }
+    }
+    if (countNN == 0) {
+        return cree_vecteur_creux(x->taille, 0);
+    }
+
+    int *temp = (int *)realloc(NNTab, countNN * sizeof(int));
+    if(temp == NULL) {
+        printf("Erreur realloc %d\n", countNN);
+        return NULL;
+    }
+
+    vecCreux *prod = cree_vecteur_creux(x->taille, countNN);
+    if (prod == NULL) {
+        printf("erreur prod\n");
+        free(NNTab);
+        return NULL;
+    } 
+
+    // Rangements des index dans l'ordre croissant
+    qsort(NNTab, countNN, sizeof(int), compare);
+
+    // On retient l'index des lignes de prod
+    for (int i = 0; i < countNN; i++) {
+        NNindexs[NNTab[i]] = i;
+        prod->index[i] = NNTab[i];
+        prod->val[i] = 0;
+    }
+
+    for (int i = 0; i < x->nbEleNN; i++) {
+        int col = x->index[i];
+
+        for (int idx = U->colonne[col]; idx < U->colonne[col + 1]; idx++) {
+            int lgn = U->ligne[idx];
+
+            if (lgn >= col) continue;
+
+            prod->val[NNindexs[lgn]] += U->val[idx] * x->val[i];
+        }
+    }
+
+    for (int i = 0; i < countNN; i++) {
+        NNindexs[NNTab[i]] = -1;
+    }
+
+    return prod;
 }

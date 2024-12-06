@@ -53,7 +53,7 @@ CSC *cree_matrice_creuse(char *file)
         free(ptrCSC);
         return NULL;
     }
-
+    
     // Fonction de Triage
     mergeSort(ptrM->ligne, ptrM->colonne, ptrM->val, ptrCSC->nbElement);
 
