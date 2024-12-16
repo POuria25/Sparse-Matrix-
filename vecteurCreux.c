@@ -161,6 +161,7 @@ vecCreux *lire_vecteur(char *filename) {
 
     free(memIndexs);
 
+    fclose(opf);
     return vc;
 }
 

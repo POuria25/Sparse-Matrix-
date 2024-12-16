@@ -55,6 +55,11 @@ vecCreux *linSysLxEqualb(CSC *L, vecCreux *b, int *NNindexs)
     for (int i = 0; i < b->nbEleNN; i++) {
         calcNonNulsX(L, b->index[i], &nonNulsX, NNindexs, nonNulsTab);
     }
+    if (nonNulsX == 0) {
+        free(nonNulsTab);
+        return NULL;
+    }
+
     int *temp = (int *)realloc(nonNulsTab, nonNulsX * sizeof(int));
     if (temp == NULL) {
         fprintf(stderr, "Erreur d'allocation du tableau temporaire\n");
@@ -105,7 +110,7 @@ vecCreux *linSysLxEqualb(CSC *L, vecCreux *b, int *NNindexs)
 
         // Si bi est non nuls mais Lii l'est
         if (diag == 0) {
-            fprintf(stderr, "La matrice contient une valeure nulle où elle ne devrait pas en %d\n", index);
+            detruire_vecteur(x);
             for (int j = 0; j < x->nbEleNN; j++) {
                 NNindexs[nonNulsTab[j]] = -1;
             }
@@ -127,6 +132,7 @@ vecCreux *linSysLxEqualb(CSC *L, vecCreux *b, int *NNindexs)
         NNindexs[x->index[i]] = -1;
     }
 
+    free(nonNulsTab);
     return x;
 }
 
@@ -141,6 +147,7 @@ vecCreux *calcUx(CSC *U, vecCreux *x, int *NNindexs)
         for (int idx = U->colonne[col]; idx < U->colonne[col + 1]; idx++) {
             int lgn = U->ligne[idx];
 
+            // Ajoute les element en haut à droite 
             if (lgn < col && NNindexs[lgn] == -1) {
                 NNTab[countNN] = lgn;
                 NNindexs[lgn] = 0;
@@ -149,15 +156,20 @@ vecCreux *calcUx(CSC *U, vecCreux *x, int *NNindexs)
         }
     }
     if (countNN == 0) {
+        free(NNTab);
         return cree_vecteur_creux(x->taille, 0);
     }
 
+    // Change la taille du tableau d'index
     int *temp = (int *)realloc(NNTab, countNN * sizeof(int));
     if(temp == NULL) {
         printf("Erreur realloc %d\n", countNN);
+        free(NNTab);
         return NULL;
     }
+    NNTab = temp;
 
+    // Prepare le vecteur solution
     vecCreux *prod = cree_vecteur_creux(x->taille, countNN);
     if (prod == NULL) {
         printf("erreur prod\n");
@@ -175,6 +187,7 @@ vecCreux *calcUx(CSC *U, vecCreux *x, int *NNindexs)
         prod->val[i] = 0;
     }
 
+    // Calcul colonne par colonne
     for (int i = 0; i < x->nbEleNN; i++) {
         int col = x->index[i];
 
@@ -183,13 +196,16 @@ vecCreux *calcUx(CSC *U, vecCreux *x, int *NNindexs)
 
             if (lgn >= col) continue;
 
+            // Ajout de la ligne dans la solution
             prod->val[NNindexs[lgn]] += U->val[idx] * x->val[i];
         }
     }
 
+    // Reinitialisation des indexs
     for (int i = 0; i < countNN; i++) {
         NNindexs[NNTab[i]] = -1;
     }
 
+    free(NNTab);
     return prod;
 }

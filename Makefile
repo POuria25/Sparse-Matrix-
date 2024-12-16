@@ -69,4 +69,4 @@ tar:
 .PHONY: clean
 
 clean:
-	rm -rf $(BUILD_DIR) $(PROG) *.o cppcheck_report.txt
+	rm -rf $(BUILD_DIR) $(PROG) *.o cppcheck_report.txt produit.mtx
