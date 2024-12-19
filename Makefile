@@ -1,5 +1,5 @@
 CC = gcc
-PROG = sparseMatrix
+PROG = projet
 
 BUILD_DIR := ./build
 
@@ -19,9 +19,6 @@ $(BUILD_DIR)/%.o: %.c
 	@mkdir -p $(BUILD_DIR)
 	$(CC) -c $< -o $@ $(CFLAGS)
 
-run: $(PROG)
-	./$(PROG)
-
 valgrind:
 	valgrind --track-origins=yes --leak-check=full ./$(PROG)
 
@@ -29,14 +26,23 @@ gdb:
 	gdb ./$(PROG)
 
 cppcheck:
-	cppcheck --enable=all --check-config --inconclusive --verbose -I. --suppress=missingIncludeSystem --output-file=cppcheck_report.txt $(SRC_FILES)
-	cppcheck --enable=warning,style,performance,portability,information --inconclusive --verbose -I. --suppress=missingIncludeSystem --output-file=cppcheck_report.txt $(SRC_FILES)
-	cppcheck --enable=unusedFunction --check-config --inconclusive --verbose -I. --suppress=missingIncludeSystem --output-file=cppcheck_report.txt $(SRC_FILES)
-	cppcheck --enable=performance --inconclusive --verbose -I. --suppress=missingIncludeSystem --output-file=cppcheck_report.txt $(SRC_FILES)
-	cppcheck --enable=all --inconclusive --verbose --force -I. --suppress=missingIncludeSystem --output-file=cppcheck_report.txt $(SRC_FILES)
-	cppcheck --enable=style --inconclusive --verbose -I. --suppress=missingIncludeSystem --output-file=cppcheck_report.txt $(SRC_FILES)
-	cppcheck --enable=all --inconclusive --verbose --suppress=missingIncludeSystem -I. --output-file=cppcheck_report.txt $(SRC_FILES)
-	cppcheck --enable=style --inconclusive --verbose --suppress=missingIncludeSystem -I. --output-file=cppcheck_report.txt $(SRC_FILES)
+	echo "Running cppcheck with --enable=all and --check-config..." >> cppcheck_report.txt
+	cppcheck --enable=all --check-config --inconclusive --verbose -I. --suppress=missingIncludeSystem $(SRC_FILES) >> cppcheck_report.txt 2>&1
+	echo "\n\nRunning cppcheck with --enable=warning,style,performance,portability,information..." >> cppcheck_report.txt
+	cppcheck --enable=warning,style,performance,portability,information --inconclusive --verbose -I. --suppress=missingIncludeSystem $(SRC_FILES) >> cppcheck_report.txt 2>&1
+	echo "\n\nRunning cppcheck with --enable=unusedFunction and --check-config..." >> cppcheck_report.txt
+	cppcheck --enable=unusedFunction --check-config --inconclusive --verbose -I. --suppress=missingIncludeSystem $(SRC_FILES) >> cppcheck_report.txt 2>&1
+	echo "\n\nRunning cppcheck with --enable=performance..." >> cppcheck_report.txt
+	cppcheck --enable=performance --inconclusive --verbose -I. --suppress=missingIncludeSystem $(SRC_FILES) >> cppcheck_report.txt 2>&1
+	echo "\n\nRunning cppcheck with --enable=all and --force..." >> cppcheck_report.txt
+	cppcheck --enable=all --inconclusive --verbose --force -I. --suppress=missingIncludeSystem $(SRC_FILES) >> cppcheck_report.txt 2>&1
+	echo "\n\nRunning cppcheck with --enable=style..." >> cppcheck_report.txt
+	cppcheck --enable=style --inconclusive --verbose -I. --suppress=missingIncludeSystem $(SRC_FILES) >> cppcheck_report.txt 2>&1
+	echo "\n\nRunning cppcheck with --enable=all and --suppress=missingIncludeSystem..." >> cppcheck_report.txt
+	cppcheck --enable=all --inconclusive --verbose --suppress=missingIncludeSystem -I. $(SRC_FILES) >> cppcheck_report.txt 2>&1
+	echo "\n\nRunning cppcheck with --enable=style and --suppress=missingIncludeSystem..." >> cppcheck_report.txt
+	cppcheck --enable=style --inconclusive --verbose --suppress=missingIncludeSystem -I. $(SRC_FILES) >> cppcheck_report.txt 2>&1
+
 
 
 cppcheck_common_errors:
@@ -69,4 +75,4 @@ tar:
 .PHONY: clean
 
 clean:
-	rm -rf $(BUILD_DIR) $(PROG) *.o cppcheck_report.txt produit.mtx
+	rm -rf $(BUILD_DIR) $(PROG) *.o cppcheck_report.txt
