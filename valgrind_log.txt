@@ -1,0 +1,5 @@
+Valgrind Log - vr 20 dec 2024 10:56:26 CET
+Test 1 - [huge.txt, huge.b.txt, huge.sol.txt] Failed (Missing input files)
+Test 2 - [medium.txt, medium.b.txt, medium.sol.txt] Failed (Missing input files)
+Test 3 - [small.txt, small.b.txt, small.sol.txt] Failed (Missing input files)
+Test 4 - [tiny.txt, tiny.b.txt, tiny.sol.txt] Failed (Missing input files)

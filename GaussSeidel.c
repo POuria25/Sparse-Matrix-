@@ -157,7 +157,7 @@ vecCreux *Gauss_Seidel(CSC *A, vecCreux *b, double precision, int maxIter)
         int countNN = 0;
         int *indexTab = (int *)malloc(b->taille * sizeof(int));
         if (indexTab == NULL) {
-            printf("Erreur lors de l'allocation du tableau d'index\n", iter);
+            printf("Erreur lors de l'allocation du tableau d'index\n");
             free(arrNN);
             detruire_vecteur(x);
             detruire_vecteur(Ux);
@@ -165,7 +165,7 @@ vecCreux *Gauss_Seidel(CSC *A, vecCreux *b, double precision, int maxIter)
         }
         double *valTab = (double *)malloc(b->taille * sizeof(double));
         if (valTab == NULL) {
-            printf("Erreur lors de l'allocation du tableau de valeur\n", iter);
+            printf("Erreur lors de l'allocation du tableau de valeur\n");
             free(arrNN);
             detruire_vecteur(x);
             detruire_vecteur(Ux);
